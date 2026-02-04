@@ -146,7 +146,7 @@ def update_lesson(lesson_slug, course):
     )
 
 
-@lessons_bp.route("/lesson/<lesson_id>/delete", methods=["POST"])
+@lessons_bp.route("/dashboard/lesson/<lesson_id>/delete", methods=["POST"])
 @login_required
 def delete_lesson(lesson_id):
     lesson = Lesson.query.get_or_404(lesson_id)
@@ -156,4 +156,4 @@ def delete_lesson(lesson_id):
     db.session.delete(lesson)
     db.session.commit()
     flash("Your lesson has been deleted!", "success")
-    return redirect(url_for("users.user_lessons"))
+    return redirect(url_for("lessons.user_lessons"))

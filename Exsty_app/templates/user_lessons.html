@@ -68,9 +68,11 @@
                         </a>
 
                         <button class="btn btn-delete"
-                                onclick="openDeleteConfirm('{{ lesson.id }}', '{{ lesson.title }}')">
+                                data-delete-url="{{ url_for('lessons.delete_lesson', lesson_id=lesson.id) }}"
+                                onclick="openDeleteConfirm(this, '{{ lesson.title }}')">
                             <i class="bi bi-trash"></i> Delete
                         </button>
+
                     </div>
 
                 </div>
@@ -141,11 +143,12 @@
 ================================ -->
 
 <script>
-function openDeleteConfirm(lessonId, lessonTitle) {
+function openDeleteConfirm(button, lessonTitle) {
     document.getElementById('deleteLessonTitle').innerText = lessonTitle;
-    document.getElementById('deleteForm').action = `/delete_lesson/${lessonId}`;
+    document.getElementById('deleteForm').action = button.dataset.deleteUrl;
     document.getElementById('deleteOverlay').classList.add('active');
 }
+
 
 function closeDeleteConfirm() {
     document.getElementById('deleteOverlay').classList.remove('active');
