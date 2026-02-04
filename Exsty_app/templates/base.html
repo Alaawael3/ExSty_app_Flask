@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('main.home') }}" class="navbar-brand">EXSTY</a>
+            <button class="navbar-toggler" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-collapse" id="navmenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="{{ url_for('main.about') }}" class="nav-link">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#learn" class="nav-link">Start Learning</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item account-wrapper">
+                            <button class="account-trigger" id="accountToggle" onclick="toggleAccountMenu()">
+                                Account <span class="arrow">▾</span>
+                            </button>
+
+                            <div class="account dropdown-menue" id="accountMenu">
+                                <a href="{{ url_for('users.dashboard') }}" class="nav-link">Dashboard</a>
+                                <a href="{{ url_for('users.logout') }}" class="nav-link logout">Logout</a>
+                            </div>
+                        </li>
+
+
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{{ url_for('users.register') }}" class="nav-link">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('users.login') }}" class="nav-link">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" aria-label="Close" onclick="this.parentElement.classList.add('fade-out'); setTimeout(() => this.parentElement.remove(), 400);"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+
+        {% block content %}{% endblock %}
+
+        
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section" style="text-align: center;">
+                    <h4>Social Links</h4>
+                    <a href="#" class="social-icon"><i class="bi bi-github"></i></a>
+                    <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p>alaawael1016@gmail.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright &copy; 2026 | EXSTY</p>
+            </div>
+        </div>
+    </footer>
+    <a href="#" class="scroll-top">
+        <i class="bi bi-arrow-up-circle"></i>
+    </a>
+
+    <script>
+        function toggleMenu() {
+            const navmenu = document.getElementById('navmenu');
+            navmenu.classList.toggle('active');
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Show/hide scroll to top button
+        const scrollTop = document.querySelector('.scroll-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTop.style.opacity = '1';
+            } else {
+                scrollTop.style.opacity = '0';
+            }
+        });
+
+        const checkbox = document.getElementById("showPassword");
+        const passwordInput = document.getElementById("password");
+
+        checkbox.addEventListener("change", function () {
+            passwordInput.type = this.checked ? "text" : "password";
+        });
+
+
+        // Toggle Account Dropdown
+        function toggleAccountMenu() {
+            const account_wrapper = document.querySelector('.account-wrapper');
+            account_wrapper.classList.toggle('active');
+        }
+
+
+
+        // ======================
+        // AJAX Profile Form Submission
+        // ======================
+        const form = document.getElementById("profileForm");
+
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault(); // 🚨 STOP page refresh
+
+            const formData = new FormData(form);
+
+            const response = await fetch("/dashboard", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            // ======================
+            // SUCCESS
+            // ======================
+            if (data.status === "success") {
+
+                alert(data.message);
+
+                // update profile image instantly
+                document.querySelector(".user-img").src =
+                    data.image_url + "?t=" + new Date().getTime(); // prevent cache
+
+                clearErrors();
+            }
+
+            // ======================
+            // ERROR
+            // ======================
+            else {
+                showErrors(data.errors);
+            }
+        });
+
+
+        // ======================
+        // Helpers
+        // ======================
+
+        function clearErrors() {
+            document.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+            document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+        }
+
+        function showErrors(errors) {
+
+            clearErrors();
+
+            for (const field in errors) {
+
+                const input = document.querySelector(`[name="${field}"]`);
+
+                if (!input) continue;
+
+                input.classList.add("is-invalid");
+
+                const div = document.createElement("div");
+                div.className = "invalid-feedback";
+                div.innerText = errors[field][0];
+
+                input.parentNode.appendChild(div);
+            }
+        }
+
+
+        function openCourseModal() {
+            document.getElementById('newCourse').classList.add('show-modal');
+        }
+
+        function closeCourseModal() {
+            document.getElementById('newCourse').classList.remove('show-modal');
+        }
+
+
+    </script>
+    
+
+</body>
+
+</html>

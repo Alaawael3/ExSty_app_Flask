@@ -1,0 +1,88 @@
+{% extends "lesson.html"%}
+{% block lesson %}
+
+
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    
+                    <fieldset class='form-group'>
+                        <legend>Create New Lesson</legend>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.course.label(class='form-control-label') }}
+                            {% if form.course.errors %}
+                                {{ form.course(class='form-select is-invalid') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.course.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.course(class='form-select') }}
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.title.label(class='form-control-label') }}
+                            {% if form.title.errors %}
+                                {{ form.title(class='form-control is-invalid') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.title.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.title(class='form-control') }}
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ form.slug.label(class='form-control-label') }}
+                            {% if form.slug.errors %}
+                                {{ form.slug(class='form-control is-invalid') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.slug.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.slug(class='form-control') }}
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ form.content.label(class='form-control-label') }}
+                            {% if form.content.errors %}
+                                {{ form.content(class='form-control is-invalid', rows="10") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.content.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.content(class='form-control', rows="10") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ form.thumbnail.label(class='form-control-label') }}
+                            {% if form.thumbnail.errors %}
+                                {{ form.thumbnail(class='form-control-file is-invalid') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.thumbnail.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.thumbnail(class='form-control-file') }}
+                            {% endif %}
+                        </div>
+
+                        <div class="text-center">
+                            {{ form.submit(class='btn btn-success') }}
+                        </div>
+                    </fieldset>
+                </form>
+                {{ ckeditor.load() }}
+                {{ ckeditor.config(name='form.content') }}
+{% endblock %}

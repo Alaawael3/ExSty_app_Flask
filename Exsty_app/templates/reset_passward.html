@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Reset Passward{% endblock %}
+
+{% block content %}
+    <section class="form-section">
+        <div class="container">
+            <h2 class="section-title">Reset Passward</h2>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control", id="password", placeholder="Enter Password") }}
+
+                    <div style="margin-top: 5px;">
+                        <input type="checkbox" id="showPassword">
+                        <label for="showPassword">Show password</label>
+                    </div>
+
+                    {% for error in form.password.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
+                    {% for error in form.confirm_password.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="error-page error-403">
+    <div class="error-background">
+        <div class="glitch-circle circle-1"></div>
+        <div class="glitch-circle circle-2"></div>
+        <div class="glitch-circle circle-3"></div>
+        <div class="lock-particles"></div>
+    </div>
+
+    <div class="container">
+        <div class="error-content">
+            <!-- Error Code -->
+            <div class="error-code-wrapper">
+                <h1 class="error-code error-code-403" data-text="403">403</h1>
+                <div class="error-icon lock-icon">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message">
+                <h2 class="error-title error-title-403">Access Forbidden</h2>
+                <p class="error-description">
+                    You don't have permission to access this resource. 
+                    This area is restricted to authorized users only.
+                </p>
+            </div>
+
+            <!-- Error Details -->
+            <div class="error-details error-details-403">
+                <div class="detail-item">
+                    <i class="bi bi-person-x"></i>
+                    <span>You may not have the required permissions</span>
+                </div>
+                <div class="detail-item">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Please check your account credentials</span>
+                </div>
+                <div class="detail-item">
+                    <i class="bi bi-key"></i>
+                    <span>Contact an administrator if you believe this is an error</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="error-actions">
+                <a href="{{ url_for('main.home') }}" class="btn btn-primary-action">
+                    <i class="bi bi-house-door"></i>
+                    Back to Home
+                </a>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('users.profile') }}" class="btn btn-secondary-action">
+                    <i class="bi bi-person-circle"></i>
+                    My Dashboard
+                </a>
+                {% else %}
+                <a href="{{ url_for('userslogin') }}" class="btn btn-secondary-action">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Login
+                </a>
+                {% endif %}
+                <a href="mailto:support@yoursite.com" class="btn btn-tertiary-action">
+                    <i class="bi bi-headset"></i>
+                    Contact Support
+                </a>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="error-footer">
+                <p class="error-id error-id-403">
+                    <i class="bi bi-info-circle"></i>
+                    If you think this is a mistake, please contact our support team
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

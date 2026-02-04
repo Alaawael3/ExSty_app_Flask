@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="courses-page">
+    <!-- Page Header -->
+    <div class="courses-page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="page-title">
+                    <i class="bi bi-mortarboard-fill"></i>
+                    All Courses
+                </h1>
+                <p class="page-subtitle">Explore our comprehensive collection of programming courses</p>
+                <div class="courses-count">
+                    <span class="count-badge">
+                        <i class="bi bi-collection-play"></i>
+                        {{ courses.total }} Courses Available
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses Grid Section -->
+    <section class="courses-grid-section">
+        <div class="container">
+            {% if courses.items %}
+            <div class="courses-grid">
+                {% for course in courses.items %}
+                <a href="{{ url_for('courses.course', course_title=course.name) }}" class="course-card-link">
+                    <div class="course-card">
+                        <div class="course-card-inner">
+                            <div class="course-icon-section">
+                                <div class="icon-glow-wrapper">
+                                    <img src="{{ url_for('static', filename='Courses/'+course.icon) }}" 
+                                         alt="{{ course.name }}" 
+                                         class="course-icon">
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <h3 class="course-name">{{ course.name }}</h3>
+                                <p class="course-description">{{ course.description }}</p>
+                                <div class="course-footer">
+                                    <span class="lesson-count">
+                                        <i class="bi bi-play-circle"></i>
+                                        {{ course.lessons|length }} Lessons
+                                    </span>
+                                    <span class="explore-link">
+                                        Explore <i class="bi bi-arrow-right"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if courses.pages > 1 %}
+            <div class="pagination-wrapper">
+                <nav class="pagination-nav">
+                    <!-- Previous Button -->
+                    {% if courses.has_prev %}
+                    <a href="{{ url_for('courses.courses', page=courses.prev_num) }}" class="pagination-btn prev-btn">
+                        <i class="bi bi-chevron-left"></i>
+                        <span>Previous</span>
+                    </a>
+                    {% else %}
+                    <span class="pagination-btn prev-btn disabled">
+                        <i class="bi bi-chevron-left"></i>
+                        <span>Previous</span>
+                    </span>
+                    {% endif %}
+
+                    <!-- Page Numbers -->
+                    <div class="pagination-numbers">
+                        {% for page_num in courses.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num == courses.page %}
+                                <span class="page-number active">{{ page_num }}</span>
+                                {% else %}
+                                <a href="{{ url_for('courses.courses', page=page_num) }}" class="page-number">{{ page_num }}</a>
+                                {% endif %}
+                            {% else %}
+                                <span class="page-ellipsis">...</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Next Button -->
+                    {% if courses.has_next %}
+                    <a href="{{ url_for('courses.courses', page=courses.next_num) }}" class="pagination-btn next-btn">
+                        <span>Next</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                    {% else %}
+                    <span class="pagination-btn next-btn disabled">
+                        <span>Next</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </span>
+                    {% endif %}
+                </nav>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-inbox"></i>
+                </div>
+                <h3 class="empty-title">No Courses Available</h3>
+                <p class="empty-description">Check back soon for new courses!</p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+
+{% endblock content %}

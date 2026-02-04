@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Reset Passward{% endblock %}
+
+{% block content %}
+    <section class="form-section">
+        <div class="container">
+            <h2 class="section-title">Login</h2>
+            <form method="POST" action="">
+                <!-- it adds the CSRF token-->
+                {{ form.hidden_tag() }} 
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control", placeholder="Enter Email") }}
+                    {% for error in form.email.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+
+    </section>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="lesson-page">
+    <div class="container">
+        <!-- Breadcrumb Navigation -->
+         
+         {% block lesson %} {% endblock lesson %}
+
+        <nav class="lesson-breadcrumb">
+            <a href="{{ url_for('main.home') }}">Home</a>
+            <span class="separator">/</span>
+            <a href="#">{{ lesson.course.name }}</a>
+            <span class="separator">/</span>
+            <span class="current">{{ lesson.title }}</span>
+        </nav>
+
+        <div class="row">
+            <!-- Sidebar - Now on the left -->
+            <div class="col-lg-3 col-md-12 order-lg-1 order-2">
+                <div class="lesson-sidebar">
+                    <!-- Course Info Card -->
+                    <div class="course-info-card">
+                        <div class="course-icon-container">
+                            <img src="{{ url_for('static', filename='Courses/'+lesson.course.icon) }}" 
+                                 alt="{{ lesson.course.name }}"
+                                 class="course-icon">
+                        </div>
+                        <h4 class="course-name">{{ lesson.course.name }}</h4>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%"></div>
+                            </div>
+                            <span class="progress-text">{{ lesson.course.lessons|length }} Lessons</span>
+                        </div>
+                    </div>
+
+                    <!-- Lessons List -->
+                    <div class="lessons-sidebar-list">
+                        <h5 class="sidebar-title">
+                            <i class="bi bi-list-ul"></i> Course Content
+                        </h5>
+                        <div class="lessons-list-container">
+                            {% for lsn in lesson.course.lessons %}
+                            <a href="{{ url_for('lessons.lesson', lesson_slug=lsn.slug, course=lsn.course.name) }}"
+                               class="lesson-item {% if lsn.title == lesson.title %}active{% endif %}">
+                                <span class="lesson-number">{{ loop.index }}</span>
+                                <span class="lesson-title">{{ lsn.title }}</span>
+                                {% if lsn.title == lesson.title %}
+                                <i class="bi bi-play-circle-fill current-indicator"></i>
+                                {% endif %}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-lg-9 col-md-12 order-lg-2 order-1">
+                <!-- Lesson Header -->
+                <div class="lesson-header">
+                    <div class="lesson-meta">
+                        <div class="author-badge">
+                            <img class="author-avatar"
+                                 src="{{ url_for('static', filename='profile_pics/'+lesson.author.img_file) }}" 
+                                 alt="{{ lesson.author.username }}">
+                            <div class="author-details">
+                                <span class="author-label">Instructor</span>
+                                <a href="#" class="author-name">{{ lesson.author.username }}</a>
+                            </div>
+                        </div>
+                        <div class="lesson-date">
+                            <i class="bi bi-calendar3"></i>
+                            <span>{{ lesson.date_posted.strftime('%B %d, %Y') }}</span>
+                        </div>
+                    </div>
+                    
+                    <h1 class="lesson-title">{{ lesson.title }}</h1>
+                    
+                    <div class="lesson-tags">
+                        <span class="tag">{{ lesson.course.name }}</span>
+                        <span class="tag tag-difficulty">Intermediate</span>
+                    </div>
+                </div>
+
+                <!-- Lesson Content -->
+                <div class="lesson-content-card">
+                    <div class="lesson-article">
+                        {{ lesson.content | safe }}
+                    </div>
+                </div>
+
+                <!-- Navigation Footer -->
+                <div class="lesson-nav-footer">
+                    {% if previous_lesson %}
+                    <a href="{{ url_for('lessons.lesson', lesson_slug=previous_lesson.slug, course=previous_lesson.course.name) }}"
+                       class="nav-card nav-prev">
+                        <span class="nav-label">
+                            <i class="bi bi-arrow-left"></i> Previous
+                        </span>
+                        <span class="nav-title">{{ previous_lesson.title }}</span>
+                    </a>
+                    {% else %}
+                    <div></div>
+                    {% endif %}
+
+                    {% if next_lesson %}
+                    <a href="{{ url_for('lessons.lesson', lesson_slug=next_lesson.slug, course=next_lesson.course.name) }}"
+                       class="nav-card nav-next">
+                        <span class="nav-label">
+                            Next <i class="bi bi-arrow-right"></i>
+                        </span>
+                        <span class="nav-title">{{ next_lesson.title }}</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

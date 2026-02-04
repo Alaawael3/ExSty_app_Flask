@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="error-page error-404">
+    <div class="error-background">
+        <div class="glitch-circle circle-1"></div>
+        <div class="glitch-circle circle-2"></div>
+        <div class="glitch-circle circle-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="error-content">
+            <div class="error-code-wrapper">
+                <h1 class="error-code" data-text="404">404</h1>
+                <div class="error-icon">
+                    <i class="bi bi-question-circle-fill"></i>
+                </div>
+            </div>
+
+            <div class="error-message">
+                <h2 class="error-title">Page Not Found</h2>
+                <p class="error-description">
+                    Oops! The page you're looking for doesn't exist. 
+                    It might have been moved or deleted.
+                </p>
+            </div>
+
+            <div class="error-details">
+                <div class="detail-item">
+                    <i class="bi bi-lightbulb"></i>
+                    <span>Double-check the URL or use the navigation menu</span>
+                </div>
+                <div class="detail-item">
+                    <i class="bi bi-search"></i>
+                    <span>Try searching for what you need from our home page</span>
+                </div>
+            </div>
+
+            <div class="error-actions">
+                <a href="{{ url_for('main.home') }}" class="btn btn-primary-action">
+                    <i class="bi bi-house-door"></i>
+                    Back to Home
+                </a>
+                <a href="{{ url_for('courses.courses') }}" class="btn btn-secondary-action">
+                    <i class="bi bi-mortarboard"></i>
+                    Browse Courses
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

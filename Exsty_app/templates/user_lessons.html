@@ -1,0 +1,155 @@
+{% extends "dashboard.html" %}
+{% block user_lessons %}
+
+<div class="{{ 'tab-pane fade show active fade-in' if active_tab == 'user_lessons' else 'tab-pane fade' }}"
+     id="nav-user_lessons" role="tabpanel">
+
+<section class="user-lessons-section">
+
+    <!-- Header -->
+    <div class="lessons-header">
+        <div class="header-content">
+            <div>
+                <h2 class="lessons-title">
+                    <i class="bi bi-journal-text"></i> My Lessons
+                </h2>
+                <p class="lessons-subtitle">
+                    Manage and edit your published lessons
+                </p>
+            </div>
+
+            <div class="stat-badge">
+                <span class="stat-number">{{ current_user.lesson|length }}</span>
+                <span class="stat-label">Total Lessons</span>
+            </div>
+        </div>
+    </div>
+
+    {% if current_user.lesson|length > 0 %}
+
+    <div class="user-lessons-grid">
+
+        {% for lesson in current_user.lesson %}
+        <div class="user-lesson-card-wrapper">
+
+            <div class="card user-lesson-card">
+
+                <span class="lesson-number-badge">{{ loop.index }}</span>
+
+                <img src="{{ url_for('static', filename='Lessons/' ~ lesson.thumbnail) }}"
+                     class="card-img"
+                     alt="{{ lesson.title }}">
+
+                <div class="card-body d-flex flex-column">
+
+                    <h5 class="card-title">
+                        <a href="{{ url_for('lessons.lesson', lesson_slug=lesson.slug, course=lesson.course.name) }}"
+                           data-lesson-title="{{ lesson.id }}">
+                            {{ lesson.title }}
+                        </a>
+                    </h5>
+
+                    <div class="lesson-meta-info">
+                        <span class="course-badge">
+                            <i class="bi bi-folder"></i> {{ lesson.course.name }}
+                        </span>
+
+                        <span class="date-info">
+                            <i class="bi bi-calendar3"></i>
+                            {{ lesson.date_posted.strftime('%b %d, %Y') }}
+                        </span>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="lesson-actions">
+                        <a href="{{ url_for('lessons.update_lesson', lesson_slug=lesson.slug, course=lesson.course.name) }}"
+                           class="btn btn-edit">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+
+                        <button class="btn btn-delete"
+                                onclick="openDeleteConfirm('{{ lesson.id }}', '{{ lesson.title }}')">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <!-- Empty State -->
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="bi bi-journal-x"></i>
+        </div>
+        <h3 class="empty-title">No Lessons Yet</h3>
+        <p class="empty-description">
+            You haven't created any lessons yet.
+        </p>
+        <a href="{{ url_for('lessons.new_lesson') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Create Lesson
+        </a>
+    </div>
+
+    {% endif %}
+
+</section>
+</div>
+
+<!-- ===============================
+     Delete Confirmation Overlay
+================================ -->
+
+<div class="delete-overlay" id="deleteOverlay">
+    <div class="delete-box">
+
+        <h4>
+            <i class="bi bi-exclamation-triangle"></i>
+            Delete Lesson
+        </h4>
+
+        <p>
+            Are you sure you want to delete
+            <strong id="deleteLessonTitle"></strong>?
+        </p>
+
+        <small class="danger-text">
+            This action cannot be undone.
+        </small>
+
+        <div class="delete-actions">
+            <button class="btn-cancel" onclick="closeDeleteConfirm()">
+                Cancel
+            </button>
+
+            <form id="deleteForm" method="POST">
+                <button type="submit" class="btn-confirm-delete">
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ===============================
+     Delete Logic
+================================ -->
+
+<script>
+function openDeleteConfirm(lessonId, lessonTitle) {
+    document.getElementById('deleteLessonTitle').innerText = lessonTitle;
+    document.getElementById('deleteForm').action = `/delete_lesson/${lessonId}`;
+    document.getElementById('deleteOverlay').classList.add('active');
+}
+
+function closeDeleteConfirm() {
+    document.getElementById('deleteOverlay').classList.remove('active');
+}
+</script>
+
+{% endblock user_lessons %}

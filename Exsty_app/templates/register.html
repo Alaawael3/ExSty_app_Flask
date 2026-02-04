@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <section class="form-section">
+        <div class="container">
+            <h2 class="section-title">Register</h2>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.fname.label(class="form-label") }}
+                    {{ form.fname(class="form-control", placeholder="Enter First Name") }}
+                    {% for error in form.fname.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.lname.label(class="form-label") }}
+                    {{ form.lname(class="form-control", placeholder="Enter Last Name") }}
+                    {% for error in form.lname.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control", placeholder="Enter Username") }}
+                    {% for error in form.username.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control", placeholder="Enter Email") }}
+                    {% for error in form.email.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control", id="password", placeholder="Enter Password") }}
+
+                    <div style="margin-top: 5px;">
+                        <input type="checkbox" id="showPassword">
+                        <label for="showPassword">Show password</label>
+                    </div>
+
+                    {% for error in form.password.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
+                    {% for error in form.confirm_password.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+        <div class="container">
+            <p>Already have an account? <a href="{{ url_for('users.login') }}">Login</a></p>
+        </div>
+    </section>
+{% endblock %}

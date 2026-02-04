@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-container">
+    <div class="container">
+        <!-- Tabs -->
+        <nav>
+            <div class="nav nav-tabs" id="tablist" role="tablist">
+                <a class="nav-link {{ 'active' if active_tab == 'profile' else '' }}" 
+                   href="{{ url_for('users.profile') }}" 
+                   role="tab">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a class="nav-link {{ 'active' if active_tab == 'new_lesson' else '' }}" 
+                   href="{{ url_for('lessons.new_lesson') }}" 
+                   role="tab">
+                    <i class="fas fa-plus-circle"></i> New Lesson
+                </a>
+                <a class="nav-link {{ 'active' if active_tab == 'user_lessons' else '' }}" 
+                   href="{{ url_for('lessons.user_lessons') }}" 
+                   role="tab">
+                    <i class="fas fa-plus-circle"></i> Your Lessons
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Tab contents -->
+        <div class="tab-content" id="nav-tabContent">
+            {% block profile %}
+            {% endblock %}
+
+            {% block new_lesson %}
+            {% endblock %}
+
+            {% block user_lessons %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

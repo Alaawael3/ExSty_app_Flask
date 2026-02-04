@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Course Hero Section -->
+<div class="course-hero">
+    <div class="container">
+        <div class="course-hero-content">
+            <div class="course-hero-icon">
+                <div class="icon-wrapper">
+                    <img src="{{ url_for('static', filename='Courses/'+course.icon) }}" 
+                         alt="{{ course.name }}" 
+                         class="hero-icon">
+                </div>
+            </div>
+            <div class="course-hero-info">
+                <h1 class="course-hero-title">{{ course.name }}</h1>
+                <p class="course-hero-description">{{ course.description }}</p>
+                <div class="course-stats">
+                    <div class="stat-item">
+                        <i class="bi bi-collection-play"></i>
+                        <span>{{ course.lessons|length }} Lessons</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-clock"></i>
+                        <span>Self-paced</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="bi bi-trophy"></i>
+                        <span>Certificate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Course Lessons Section -->
+<section class="course-lessons-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Course Lessons</h2>
+            <p class="section-subtitle">Master the skills step by step</p>
+        </div>
+
+        <div class="lessons-grid">
+            {% for lesson in lessons.items %}
+            <div class="lesson-card-wrapper">
+                <div class="card lesson">
+                    <div class="lesson-number-badge">{{ loop.index }}</div>
+                    <img src="{{ url_for('static', filename='Lessons/'+lesson.thumbnail) }}" 
+                         class="card-img" 
+                         alt="{{ lesson.title }}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{{ url_for('lessons.lesson', lesson_slug=lesson.slug, course=lesson.course.name) }}">
+                                {{ lesson.title }}
+                            </a>
+                        </h5>
+                        <span class="author-info">
+                            <img class="article-img rounded-circle"
+                                 src="{{ url_for('static', filename='profile_pics/'+lesson.author.img_file) }}" 
+                                 alt="{{ lesson.author.username }}">
+                            By: <a href="{{ url_for('users.author') }}" class="link">{{ lesson.author.username }}</a>
+                        </span>
+                        <span class="text-muted">
+                            On: {{ lesson.date_posted.strftime('%B %d, %Y') }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+            {% if lessons.pages > 1 %}
+            <div class="pagination-wrapper">
+                <nav class="pagination-nav">
+                    <!-- Previous Button -->
+                    {% if lessons.has_prev %}
+                    <a href="{{ url_for('courses.course', course_title=course.name, page=lessons.prev_num) }}" class="pagination-btn prev-btn">
+                        <i class="bi bi-chevron-left"></i>
+                        <span>Previous</span>
+                    </a>
+                    {% else %}
+                    <span class="pagination-btn prev-btn disabled">
+                        <i class="bi bi-chevron-left"></i>
+                        <span>Previous</span>
+                    </span>
+                    {% endif %}
+
+                    <!-- Page Numbers -->
+                    <div class="pagination-numbers">
+                        {% for page_num in lessons.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num == lessons.page %}
+                                <span class="page-number active">{{ page_num }}</span>
+                                {% else %}
+                                <a href="{{ url_for('courses.course', course_title=course.name, page=page_num) }}" class="page-number">{{ page_num }}</a>
+                                {% endif %}
+                            {% else %}
+                                <span class="page-ellipsis">...</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Next Button -->
+                    {% if lessons.has_next %}
+                    <a href="{{ url_for('courses.course', course_title=course.name, page=lessons.next_num) }}" class="pagination-btn next-btn">
+                        <span>Next</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                    {% else %}
+                    <span class="pagination-btn next-btn disabled">
+                        <span>Next</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </span>
+                    {% endif %}
+                </nav>
+            </div>
+            {% endif %}
+    </div>
+</section>
+
+{% endblock content %}

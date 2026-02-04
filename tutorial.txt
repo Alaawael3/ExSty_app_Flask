@@ -1,0 +1,57 @@
+to migrate the db:
+1- pip install flask-migrate
+2- from flask_migrate import Migrate
+3- migrate = Migrate(app, db)
+4- in the terminal:
+    # 1. Tell Flask which file to look at
+    $env:FLASK_APP = "main.py"
+
+    # 2. Now try the migration commands again
+    flask db init
+    flask db migrate -m "Added bio column"
+    flask db upgrade
+
+
+
+
+
+
+
+# CSRF stands for Cross-Site Request Forgery.
+
+# It’s a web security vulnerability where a malicious 
+# website tricks a user’s browser into sending an unauthorized 
+# request to a trusted website where the user is already authenticated.
+
+# Simple idea
+
+# If you are logged in to a website (like a bank or social media),
+# your browser automatically sends cookies with every request.
+
+# An attacker abuses this behavior.
+
+# How CSRF works (step by step)
+
+# You log in to a trusted site (e.g., bank.com)
+
+# Your browser stores an authentication cookie
+
+# You visit a malicious website
+
+# That website secretly sends a request to bank.com
+
+# Your browser automatically attaches your cookies
+
+# The server thinks you sent the request
+
+# 👉 Result: an action is performed without your consent
+# What CSRF can do
+    # Change passwords
+    # Transfer money
+    # Delete accounts
+    # Update user settings
+
+# The main solution (the only one you really need)
+# ✅ CSRF Token
+
+# Think of it like a secret password for each form/request.
